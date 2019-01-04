@@ -28,7 +28,7 @@ class PackageTOX:
 		self.Save_dir				= parent().par.Savelocation
 		self.Tox_Name				= parent().par.Toxname
 		self.Destory_tags			= parent().par.Destroytags
-		self.Ext_file_tags 			= ['EXT', 'MOD', 'REQS'] 
+		self.Ext_file_tags 			= parent().par.Externalfiletags 
 
 		self.GithubLink 			= "https://github.com/raganmd/touchdesigner-tox-prep-for-release"
 		print( "PackagTOX Initialized" )
@@ -38,49 +38,51 @@ class PackageTOX:
 		# format the save location for the tox
 		save_loc 					= self.Format_ready_save_loc.format(loc=self.Save_dir, name=self.Tox_Name)
 		
+		target_op 					= self.Release_target_op.eval()
+
 		# set version
-		self.Release_target_op.par.Version = self.Release_version
+		target_op.par.Version  		= self.Release_version
 
 		# clean-up external files - disable loading, remove paths
-		ext_file_tags 				= self.Ext_file_tags.split(',')
-		ops_to_prep 				= self.Release_target_op.findChildren(tags=ext_file_tags)
+		ext_file_tags 				= self.Ext_file_tags.val.split(',')
+		ops_to_prep 				= target_op.findChildren(tags=ext_file_tags)
 		self.Disable_external_file(ops_to_prep)
 
 		# ensure target tox doesn't have a file path
-		self.Release_target_op.par.externaltox = ''
+		target_op.par.externaltox = ''
 		
 		# reset target tox color to be default
-		self.Release_target_op.color = self.Reset_color
+		target_op.color = self.Reset_color
 
 		# lock the tox icon 
-		self.Release_target_op.op('null_icon').lock = True
+		target_op.op('null_icon').lock = True
 
 		# destory ops used for Dev
-		destory_tags 				= self.Destory_tags.split(',')
-		ops_to_destory 				= self.Release_target_op.findChildren(tags=destory_tags)
+		destory_tags 				= self.Destory_tags.val.split(',')
+		ops_to_destory 				= target_op.findChildren(tags=destory_tags)
 		self.Destory_ops(ops_to_destory)
 
 		# save TOX in target location
-		op(self.Release_target_op).save(save_loc)
+		target_op.save(save_loc)
 		
 		return save_loc
 	
 	def Destory_ops(self, ops_to_destory):
 		
 		for each in ops_to_destory:
-			each.destory()
+			each.destroy()
 
-		return destroy_list
+		return ops_to_destory
 
 	def Disable_external_file(self, ops_to_prep):
 	
-		for each in ops_to_destory:
+		for each in ops_to_prep:
 			# remove path par for ext
 			each.par.file 			= ''
 			# turn off loading on start
 			each.par.loadonstart 	= False
 	
-		return preped_ops_list
+		return ops_to_prep
 	
 	def Open_github_link(self):
 
