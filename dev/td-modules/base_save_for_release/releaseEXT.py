@@ -42,6 +42,7 @@ class PackageTOX:
 
 		# set version
 		target_op.par.Version  		= self.Release_version
+		target_op.par.Version.readOnly = True
 
 		# clean-up external files - disable loading, remove paths
 		ext_file_tags 				= self.Ext_file_tags.val.split(',')
