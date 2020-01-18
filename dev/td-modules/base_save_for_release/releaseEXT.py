@@ -82,6 +82,7 @@ class PackageTOX:
 			each.par.file 			= ''
 			# turn off loading on start
 			each.par.loadonstart 	= False
+			each.par.syncfile 		= False
 	
 		return ops_to_prep
 	
