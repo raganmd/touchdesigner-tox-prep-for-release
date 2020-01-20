@@ -56,8 +56,10 @@ class PackageTOX:
 		target_op.color = self.Reset_color
 
 		# lock the tox icon 
-		target_op.op('null_icon').lock = True
-
+		try:
+			target_op.op('null_icon').lock = True
+		except:
+			pass
 		# destory ops used for Dev
 		destory_tags 				= self.Destory_tags.val.split(',')
 		ops_to_destory 				= target_op.findChildren(tags=destory_tags)
@@ -82,6 +84,7 @@ class PackageTOX:
 			each.par.file 			= ''
 			# turn off loading on start
 			each.par.loadonstart 	= False
+			each.par.syncfile 		= False
 	
 		return ops_to_prep
 	
